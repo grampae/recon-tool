@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{ project }}</title>
+<style>
+body {
+  background-color: black;
+  color: #E8E8E8;
+}
+div.gallery {
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: left;
+  width: 360px;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+  overflow: auto;
+}
+</style>
+</head>
+<body>
+	
+{% for dict_item in jdata %}
+<div class="gallery">
+  <a target="_blank" href="{{dict_item['Address']}}">
+    <img src="{{dict_item['Image']}}" alt="recon data" width="800" height="600">
+  </a>
+  <div class="desc" style="height: 100px;">{{dict_item['Address']}}<br><b></b>{{dict_item['Title']}}</b><br>{{dict_item['Tech']}}</div>
+</div>
+{% endfor %}
+
+
+</body>
+</html>
+
