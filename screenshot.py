@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 from Wappalyzer import Wappalyzer, WebPage
 from humanize import naturalsize
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import geckodriver_autoinstaller
 import requests
 import jinja2
 import urllib3
@@ -47,7 +48,10 @@ def handler(signum, frame):
 signal.signal(signal.SIGINT, handler)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 warnings.filterwarnings("ignore", message="""Caught 'unbalanced parenthesis at position 119' compiling regex""", category=UserWarning )
-#driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
+
+#install gecko webdriver if not already installed
+geckodriver_autoinstaller.install()
+
 #create project directory if not exist and misc 
 prjdir = "projects/"+project
 scrdir = prjdir+"/screenshots/"

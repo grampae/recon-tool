@@ -1,0 +1,7 @@
+selenium
+webdriver_manager.firefox
+Wappalyzer
+humanize
+concurrent.futures
+jinja2
+geckodriver_autoinstaller
