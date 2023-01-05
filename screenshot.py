@@ -14,6 +14,7 @@ import requests
 import jinja2
 import urllib3
 import argparse
+from os import getcwd
 import sys
 import concurrent.futures
 import random
@@ -54,12 +55,15 @@ logging.captureWarnings(True)
 geckodriver_autoinstaller.install()
 
 #create project directory if not exist and misc 
+cwd = getcwd()
 prjdir = "projects/"+project
 scrdir = prjdir+"/screenshots/"
-newlist = prjdir+'/newurlist.txt'
+waydir = cwd+"/"+prjdir+"/wayback/"
 tdir = "./template/"
 tname = "_layout.html"
 Path(scrdir).mkdir(parents=True, exist_ok=True)
+Path(waydir).mkdir(parents=True, exist_ok=True)
+waybls = []
 jdata = []
 wap = Wappalyzer.latest()
 headers = {
@@ -93,26 +97,30 @@ def doit(URL):
 			driver.save_screenshot(scrn1)
 			print("[#] screenshot success     - "+URL1)
 			gettech(URL1, domain)
+			waybm(URL1, domain)
+		except ConnectionError:
+			print('get fucked')
+			continue
 		except TimeoutException as t:
 			print("[-] screenshot timeout     - "+URL1)
 			driver.quit()
 			continue
-		except (NoSuchElementException, WebDriverException):
+		except (NoSuchElementException, WebDriverException) as fu:
 			print("[-] screenshot unreachable - "+URL1)
 			driver.quit()
-			continue
+			break
 		finally:
 			try:
-				k = {"Address":URL1,"Image":scrn2,"Tech":gettech.wapres1,"Title":utitle}
+				k = {"Address":URL1,"Image":scrn2,"Tech":gettech.wapres1,"Title":utitle, "Wayback":waybm.wow}
 				jdata.append(k)
 				driver.quit()
 			except:
-				driver.quit()
+				continue
 
 #wappalyzer
 def gettech(URL1, domain):
 	try:
-		response = requests.get(URL1, headers=headers, timeout=8)
+		response = requests.get(URL1, headers=headers, timeout=8, verify=False)
 		wappage = WebPage.new_from_response(response)
 		wapres = wap.analyze_with_versions(wappage)
 		gettech.wapres1 = '  '.join(f'{value}' for value in wapres)
@@ -120,9 +128,35 @@ def gettech(URL1, domain):
 			exit
 		else:
 			print("[#] wappalyzer response    - "+URL1+": "+str(gettech.wapres1))
-	except:
-		print("[!] wappalyzer response    - "+URL1+": Failed")
+	except ConnectionError:
+		print("[!] wappalyzer response    - "+URL1+": Connection Error")
+	except Exception:
+		print("[!] wappalyzer response    - "+URL1+": Connection Error")
 
+#wayback machine
+def waybm(URL1,domain):
+	try:
+		wayb = "http://web.archive.org/cdx/search/cdx?url="+URL1+"*&output=text"
+		with requests.get(wayb, headers=headers, verify=False, timeout=8) as waybmr:
+			if waybmr.text  == "":
+				exit
+			else:
+				waybm.wow = waydir+domain+".txt"
+				print("[#] wayback urls found     - "+URL1+": "+prjdir+"/wayback/"+domain+".txt")
+				waybml = waybmr.text
+				line2 = waybml.splitlines()
+				for line3 in line2:
+					ab=line3.split()[2]
+					waybls.append(ab)
+				waybls2 = (set(waybls))
+				with open(waybm.wow, 'a') as wu:
+					for wurl in waybls2:
+						wu.write("%s\n" % wurl)
+	except ConnectionError:
+		print("[!] wayback response       - "+URL1+": Connection Error 1")
+	except Exception as f:
+		print("[!] wayback response       - "+URL1+": Connection Error 2")
+		print(f)
 #handle threading if multiple urls or brute force
 def tpool():
 	print("[*] Saving url screenshot(s) in "+scrdir+" directory")

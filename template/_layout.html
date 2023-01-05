@@ -37,7 +37,7 @@ div.desc {
   <a target="_blank" href="{{dict_item['Address']}}">
     <img src="{{dict_item['Image']}}" alt="recon data" width="800" height="600">
   </a>
-  <div class="desc" style="height: 100px;">{{dict_item['Address']}}<br><b></b>{{dict_item['Title']}}</b><br>{{dict_item['Tech']}}</div>
+  <div class="desc" style="height: 100px;">{{dict_item['Address']}}<br><b>{{dict_item['Title']}}</b><br>{{dict_item['Tech']}}<br><a href="file://{{dict_item['Wayback']}}">Archive.org Links</a></div>
 </div>
 {% endfor %}
 
