@@ -153,9 +153,9 @@ def waybm(URL1,domain):
 					for wurl in waybls2:
 						wu.write("%s\n" % wurl)
 	except ConnectionError:
-		print("[!] wayback response       - "+URL1+": Connection Error 1")
+		print("[!] wayback response       - "+URL1+": Connection Error")
 	except Exception as f:
-		print("[!] wayback response       - "+URL1+": Connection Error 2")
+		print("[!] wayback response       - "+URL1+": Connection Error")
 		print(f)
 #handle threading if multiple urls or brute force
 def tpool():
