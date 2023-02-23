@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{{ project }}</title>
+<title>Project:{{ proj_name() }}</title>
 <style>
+#chart {
+max-width: 380px;
+margin: 35px 20%;
+padding: 0;
+}
 body {
   background-color: black;
   color: #E8E8E8;
@@ -29,16 +34,81 @@ div.desc {
   overflow: auto;
 }
 </style>
+<script>
+window.Promise ||
+	document.write(
+	 '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+	)
+  window.Promise ||
+	document.write(
+	 '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+	)
+  window.Promise ||
+	document.write(
+	 '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+	)
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body>
-	
+<h1>Project: {{ proj_name() }}</h1>
+<div id="chart"></div>
+
+<script>   
+	var options = {
+	  align: 'left',
+	  theme: {
+		mode: 'dark', 
+		palette: 'palette10', 
+		monochrome: {
+			enabled: false,
+			color: '#A300D6',
+			shadeTo: 'dark',
+			shadeIntensity: 0.65
+		},
+	},title: {
+		text: 'Top Discovered Technologies',
+		align: 'center'
+	},
+	  series: [{{ waptotal2() }}],
+	  labels: [{{ waptotal() }}],
+	  chart: {
+	  type: 'donut',
+	  background: 'rgba(0, 0, 0, 0.5)',
+	},
+	responsive: [{
+	  breakpoint: 480,
+	  options: {
+		chart: {
+		  width: 100
+		},
+		legend: {
+		  position: 'bottom'
+		}
+	  }
+	}]
+	};
+
+	var chart = new ApexCharts(document.querySelector("#chart"), options);
+	chart.render();
+</script>
+
+
 {% for dict_item in jdata %}
 <div class="gallery">
   <a target="_blank" href="{{dict_item['Address']}}">
     <img src="{{dict_item['Image']}}" alt="recon data" width="800" height="600">
   </a>
-  <div class="desc" style="height: 100px;">{{dict_item['Address']}}<br><b>{{dict_item['Title']}}</b><br>{{dict_item['Tech']}}<br><a href="file://{{dict_item['Wayback']}}">Archive.org Links</a></div>
-</div>
+  <div class="desc" style="height: 100px;">{{dict_item['Address']}}<br><b>{{dict_item['Title']}}</b><br>{{dict_item['Tech']}}<br>
+	{% if 'Wayback' in dict_item %}
+		<b>Archive.org:</b><a href="file://{{dict_item['Wayback']}}" target="_blank" rel="noopener noreferrer">Results</a>
+	{% endif %}
+	{% if 'Shodan' in dict_item %}
+		<br><b>Shodan.io:</b><a href="{{dict_item['Shodan']}}" target="_blank" rel="noopener noreferrer">Results</a>
+	{% endif %}
+</div></div>
 {% endfor %}
 
 
