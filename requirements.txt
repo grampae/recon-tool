@@ -1,7 +1,11 @@
 selenium
-webdriver_manager.firefox
-Wappalyzer
+webdriver_manager
+python-Wappalyzer
 humanize
 concurrent.futures
 jinja2
 geckodriver_autoinstaller
+pathlib
+rich.progress
+argparse
+shodan
