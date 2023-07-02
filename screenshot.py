@@ -151,6 +151,9 @@ def hsecret(URL1,html):
 				if hresult:
 					#print(hresult.group(1))
 					print("[#] regex match            - "+URL1+": "+hpattern['name']+" "+hresult.group(0)[:100])
+					hsecret.fname = prjdir+'/regexmatch.txt'
+					with open(hsecret.fname, 'a') as hsec:
+						hsec.write(URL1+": "+hpattern['name']+" "+hresult.group(0)[:100]+"\n")
 	except Exception as e:
 		print("Error: "+e)
 #wappalyzer
@@ -203,7 +206,7 @@ def shownuff(URL1):
 	try:
 		shownuff.surl = "heyoo"
 		baseip = urlparse(URL1).hostname
-		sresults = api.search(baseip)
+		sresults = bleh
 		for sresult in sresults['matches']:
 			print('[#] shodan discovered port - '+baseip+': Open port {}'.format(sresult['port']))
 			if sresult['port']:
