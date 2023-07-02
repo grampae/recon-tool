@@ -74,9 +74,7 @@ wap = Wappalyzer.latest()
 headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
 		}
-#shodan api
-apikey = "tbTdhMDL7JgsabccwGLoJqZyI6uJK6Fj"
-api = shodan.Shodan(apikey)
+
 
 #make the requests
 def doit(URL):
@@ -201,18 +199,6 @@ def waybm(URL1,domain):
 	except Exception as f:
 		print("[!] wayback response       - "+URL1+": Connection Error")
 
-#shodan api
-def shownuff(URL1):
-	try:
-		shownuff.surl = "heyoo"
-		baseip = urlparse(URL1).hostname
-		sresults = bleh
-		for sresult in sresults['matches']:
-			print('[#] shodan discovered port - '+baseip+': Open port {}'.format(sresult['port']))
-			if sresult['port']:
-				shownuff.surl = "https://www.shodan.io/search?query="+baseip
-	except shodan.APIError as e:
-		print('Error: {}'.format(e))
 
 #handle threading if multiple urls
 def tpool():
